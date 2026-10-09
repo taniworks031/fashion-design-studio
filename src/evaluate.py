@@ -1,3 +1,4 @@
+import os
 import torch
 from dataset import FashionMNISTIdxDataset
 from networks import (
@@ -13,11 +14,14 @@ def evaluate_cgan_and_autoencoder():
   device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
   print(f"\n--- Evaluating Models on {device} ---")
 
+  current_dir = os.path.dirname(os.path.abspath(__file__))
+  models_dir = os.path.join(current_dir, "..", "models")
+
   # 1. Load trained classifier
   classifier = FashionCNNClassifier().to(device)
   classifier.load_state_dict(
       torch.load(
-          "../models/classifier.pt", map_location=device, weights_only=True
+          os.path.join(models_dir, "classifier.pt"), map_location=device, weights_only=True
       )
   )
   classifier.eval()
@@ -28,7 +32,7 @@ def evaluate_cgan_and_autoencoder():
   cgan_gen = ConditionalGenerator(latent_dim, num_classes).to(device)
   cgan_gen.load_state_dict(
       torch.load(
-          "../models/cgan_generator.pt", map_location=device, weights_only=True
+          os.path.join(models_dir, "cgan_generator.pt"), map_location=device, weights_only=True
       )
   )
   cgan_gen.eval()
@@ -64,7 +68,7 @@ def evaluate_cgan_and_autoencoder():
 
   # 3. Test Denoising Autoencoder Anomaly Detection Threshold
   checkpoint = torch.load(
-      "../models/denoising_autoencoder.pt",
+      os.path.join(models_dir, "denoising_autoencoder.pt"),
       map_location=device,
       weights_only=False,
   )

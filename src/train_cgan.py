@@ -23,7 +23,7 @@ def train_cgan():
   num_classes = 10
   lr = 0.0002
   b1, b2 = 0.5, 0.999
-  epochs = 50  # 40 epochs for diverse non-collapsed generation
+  epochs = 500  # 40 epochs for diverse non-collapsed generation
 
   # Initialize Generator and Discriminator
   generator = ConditionalGenerator(latent_dim, num_classes).to(device)

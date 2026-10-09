@@ -2,7 +2,7 @@ import io
 import os
 import sys
 
-# Ensure Python can find the 'src' folder dynamically
+# Ensure Python can find the 'src' folder
 current_dir = os.path.dirname(os.path.abspath(__file__))
 src_dir = os.path.join(current_dir, "src")
 sys.path.append(src_dir)
@@ -125,6 +125,7 @@ if app_mode == "1. cGAN Grid Generator":
     axes = axes.flatten() if grid_size > 1 else [axes]
 
     for i in range(grid_size):
+      # Clean Rescaling from Tanh range [-1, 1] to [0, 1] without harsh over-saturation
       img = (fake_imgs[i].squeeze() + 1.0) / 2.0
       img = np.clip(img, 0.0, 1.0)
 
@@ -158,6 +159,7 @@ elif app_mode == "2. VAE Latent Morphing":
     )
 
   with torch.no_grad():
+    # Base latent vector of size 20 filled with zeros
     z = torch.zeros(1, 20, device=device)
     z[0, 0] = z1_slider
     z[0, 1] = z2_slider
